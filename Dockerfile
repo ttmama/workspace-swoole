@@ -11,6 +11,13 @@ RUN apt-get update && apt-get install -y --force-yes\
 	xz-utils \
 	libsqlite3-dev \
 	sqlite3 \
+	libmemcached-dev \
+	libz-dev \
+	libpq-dev \
+	libjpeg-dev \
+	libpng12-dev \
+	libfreetype6-dev \
+	libmcrypt-dev \
 	git \
 	curl \
 	vim \
@@ -19,6 +26,26 @@ RUN apt-get update && apt-get install -y --force-yes\
 	&& apt-get clean \
 && pecl install swoole \
 && docker-php-ext-enable swoole
+
+# Install the PHP mcrypt extention
+RUN docker-php-ext-install mcrypt
+
+# Install the PHP pdo_mysql extention
+RUN docker-php-ext-install pdo_mysql
+
+# Install the PHP pdo_pgsql extention
+RUN docker-php-ext-install pdo_pgsql
+
+#####################################
+# gd:
+#####################################
+
+# Install the PHP gd library
+RUN docker-php-ext-configure gd \
+        --enable-gd-native-ttf \
+        --with-jpeg-dir=/usr/lib \
+        --with-freetype-dir=/usr/include/freetype2 && \
+    docker-php-ext-install gd
 
 #####################################
 # Composer:
